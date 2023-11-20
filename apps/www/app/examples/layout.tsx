@@ -1,75 +1,74 @@
-import { Metadata } from "next"
-import Link from "next/link"
-import { ArrowRightIcon } from "@radix-ui/react-icons"
+import { ColumnDef } from "@tanstack/react-table";
+import { Checkbox } from "@/registry/new-york/ui/checkbox";
+import { DataTableColumnHeader } from "./data-table-column-header";
 
-import { cn } from "@/lib/utils"
-import { ExamplesNav } from "@/components/examples-nav"
-import {
-  PageHeader,
-  PageHeaderDescription,
-  PageHeaderHeading,
-} from "@/components/page-header"
-import { buttonVariants } from "@/registry/new-york/ui/button"
-import { Separator } from "@/registry/new-york/ui/separator"
-
-export const metadata: Metadata = {
-  title: "Examples",
-  description: "Check out some examples app built using the components.",
-}
-
-interface ExamplesLayoutProps {
-  children: React.ReactNode
-}
-
-export default function ExamplesLayout({ children }: ExamplesLayoutProps) {
-  return (
-    <>
-      <div className="container relative">
-        <PageHeader className="page-header pb-8">
-          <Link
-            href="/docs/changelog"
-            className="inline-flex items-center rounded-lg bg-muted px-3 py-1 text-sm font-medium"
-          >
-            🎉 <Separator className="mx-2 h-4" orientation="vertical" />{" "}
-            <span className="sm:hidden">Style, a new CLI and more.</span>
-            <span className="hidden sm:inline">
-              Introducing Style, a new CLI and more.
-            </span>
-            <ArrowRightIcon className="ml-1 h-4 w-4" />
-          </Link>
-          <PageHeaderHeading className="hidden md:block">
-            Check out some examples.
-          </PageHeaderHeading>
-          <PageHeaderHeading className="md:hidden">Examples</PageHeaderHeading>
-          <PageHeaderDescription>
-            Dashboard, cards, authentication. Some examples built using the
-            components. Use this as a guide to build your own.
-          </PageHeaderDescription>
-          <section className="flex w-full items-center space-x-4 pb-8 pt-4 md:pb-10">
-            <Link
-              href="/docs"
-              className={cn(buttonVariants(), "rounded-[6px]")}
-            >
-              Get Started
-            </Link>
-            <Link
-              href="/components"
-              className={cn(
-                buttonVariants({ variant: "outline" }),
-                "rounded-[6px]"
-              )}
-            >
-              Components
-            </Link>
-          </section>
-        </PageHeader>
-        <section>
-          <ExamplesNav />
-          <div className="overflow-hidden rounded-[0.5rem] border bg-background shadow">
-            {children}
-          </div>
-        </section>
-      </div>
-    </>
-  )
-}
+export const columns: ColumnDef<Task>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+        className="translate-y-[2px]"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+        className="translate-y-[2px]"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  // ... other existing columns like 'id', 'title', 'status', etc. ...
+  {
+    accessorKey: "student",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Student" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("student")}</div>,
+  },
+  {
+    accessorKey: "year",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Year" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("year")}</div>,
+  },
+  {
+    accessorKey: "semester",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Semester" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("semester")}</div>,
+  },
+  {
+    accessorKey: "supervisor",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Supervisor" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("supervisor")}</div>,
+  },
+  {
+    accessorKey: "keyWord",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Key Word" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("keyWord")}</div>,
+  },
+  {
+    accessorKey: "rating",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Rating" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("rating")}</div>,
+  },
+  // ... any additional columns ...
+];
